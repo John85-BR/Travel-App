@@ -1,5 +1,3 @@
-
-
 let trip={
       trip_name:"",
       destination:[{
@@ -38,29 +36,23 @@ let trip={
 
 
   function getAddress(event){
-
-    
+ 
     let imagem = event.target.parentElement.parentElement.querySelector(".image");
     let country = event.target.parentElement.parentElement.querySelector(".country");
     let state = event.target.parentElement.parentElement.querySelector(".state");
     let city = event.target.parentElement.parentElement.querySelector(".city");
     let index = event.target.parentElement.parentElement.getAttribute("data-index");
     
-    
     if(country.value.length>3 && state.value.length>3 && city.value.length>3 && imagem.style.backgroundImage ==""){
 
-      let content=country.value.replace(/ /g,"+")+"+"+state.value.replace(/ /g,"+")+"+"+city.value.replace(/ /g,"+");
-      alert(content);
-          
+      let content=country.value.replace(/ /g,"+")+"+"+state.value.replace(/ /g,"+")+"+"+city.value.replace(/ /g,"+");         
       postData('http://localhost:8081/post_pixabay',{textContent:content})
       .then(data=>{           
-        let str = data.hits[0].webformatURL;
-        alert(str);
+        let str = data.hits[0].webformatURL;    
         imagem.style.backgroundImage = 'url('+str+')';
       
       });
     }
-
   }
 
   function inputChanged(event){
@@ -69,9 +61,6 @@ let trip={
       imagem.style.backgroundImage = "";
     }   
   }
-    
-
-  
   
 const getAPIData = async (url)=>{
   const res = await fetch(url);
@@ -118,8 +107,7 @@ function openOption(evt, option) {
       
       saveTripButton.style.display = "block";   
       addDestButton.style.display = "block";
-
-     
+ 
       getAPIData('https://restcountries.eu/rest/v2/all')
       .then(data=>{
         updateDatalist(data);
@@ -128,10 +116,7 @@ function openOption(evt, option) {
 
     if(evt.currentTarget.textContent=="My travel planner"){
       saveTripButton.style.display = "none";
-      addDestButton.style.display = "none";
-      
-
-      
+      addDestButton.style.display = "none";     
       addTravel.innerHTML=`<input class="trip_name" type="text" name="input" placeholder="Trip name*" data-index='0'>     
       <div class="destinations_childs" data-index='0' onkeydown="Client.inputChanged(event)">
           <p class = "search_location" onclick="return Client.getAddress(event)"><strong>Search location</strong></p> 
@@ -157,15 +142,10 @@ function openOption(evt, option) {
       .then(data=>{
         updateNewTrip(data);
       });        
-    }
-
-    
+    }   
   }
 
   function updateNewTrip(data){
-
-    
-
     for(let tripUnit of data){
 
       let tripName = document.createElement('div');
@@ -175,50 +155,47 @@ function openOption(evt, option) {
       tripName.innerHTML = `<h1>${tripUnit.trip_name}</h1>`;
       myTravel.appendChild(tripName);
      
-
       for(let destination of tripUnit.destination){
         
         let element = document.createElement('div');
         element.classList.add("destinations_childs");
         element.setAttribute("data-index",tripUnit.destination.indexOf(destination));
+        let imageUrl = "";
 
         let address = `${destination.country}, ${destination.state}, ${destination.city}`;
-    
-        let newElement = `<p class = "destination_number">
-        <strong>Destination ${tripUnit.destination.indexOf(destination)+1}</strong></p>
-        <div class="address"><p><strong>Destination</strong></p><span>${address}</span></div> 
-        <div class="date"><p><strong>Date</strong></p><span>${destination.date}</span></div> 
-        <div class="company"><p><strong>Company</strong></p><span>${destination.company}</span></div>            
-        <div class="hotel_name"><p><strong>Hotel</strong></p><span>${destination.hotel_name}</span></div> 
-        <div class="check_in"><p><strong>Check_in</strong></p><span>${destination.check_in}</span></div> 
-        <div class="check_out"><p><strong>Check_out</strong></p><span>${destination.check_out}</span></div> 
-        <div class="board_time"><p><strong>Board time</strong></p><span>${destination.board_time}</span></div>     
-        <div class = "lodgind_info"><p><strong>Lodgind info</strong></p><span>${destination.lodgind_info}</span></div>
-        <div class = "packing_list"><p><strong>Packing list</strong></p><span>${destination.packing_list}</span></div>
-        <div class = "notes"><p><strong>Notes</strong></p><span>${destination.notes}</span></div>
-        <div class = "about"><p><strong>About the place</strong></p><span>Name</span></div>`;         
-        
-        element.innerHTML=newElement; 
-        myTravel.appendChild(element);
-      }
 
-      
-      
+        let content=destination.country.replace(/ /g,"+")+"+"+destination.state.replace(/ /g,"+")+"+"+destination.city.replace(/ /g,"+");         
+        postData('http://localhost:8081/post_pixabay',{textContent:content})
+        .then(data=>{           
+          let str = data.hits[0].webformatURL;    
+          imageUrl = 'url('+str+')'; 
 
-      
-      
+          let newElement = `<p class = "destination_number">
+          <strong>Destination ${tripUnit.destination.indexOf(destination)+1}</strong></p>
+          <figure class = "image" style="background-image:${imageUrl};"></figure>
+          <div class="address"><p><strong>Destination</strong></p><span>${address}</span></div> 
+          <div class="date"><p><strong>Date</strong></p><span>${destination.date}</span></div> 
+          <div class="company"><p><strong>Company</strong></p><span>${destination.company}</span></div>            
+          <div class="hotel_name"><p><strong>Hotel</strong></p><span>${destination.hotel_name}</span></div> 
+          <div class="check_in"><p><strong>Check_in</strong></p><span>${destination.check_in}</span></div> 
+          <div class="check_out"><p><strong>Check_out</strong></p><span>${destination.check_out}</span></div> 
+          <div class="board_time"><p><strong>Board time</strong></p><span>${destination.board_time}</span></div>     
+          <div class = "lodgind_info"><p><strong>Lodgind info</strong></p><span>${destination.lodgind_info}</span></div>
+          <div class = "packing_list"><p><strong>Packing list</strong></p><span>${destination.packing_list}</span></div>
+          <div class = "notes"><p><strong>Notes</strong></p><span>${destination.notes}</span></div>
+          <div class = "about"><p><strong>About the place</strong></p><span>Name</span></div>`;                
+          element.innerHTML=newElement; 
+          myTravel.appendChild(element);
+
+        });              
+      }           
     }
-
   }
-  
-
 
   function addDestination(){
    
     let destination = document.createElement('div');
     destination.classList.add("destinations_childs"); 
-    
-
     trip.destination.push(blankDestination);
     destination.setAttribute('data-index',trip.destination.length-1);
     let temp = parseInt(destination.getAttribute('data-index'))+1;
@@ -251,9 +228,6 @@ function openOption(evt, option) {
       Client.inputChanged(event);
     });
     addTravel.appendChild(destination);
-
- 
-
   }
 
   function deleteDestination(event){
@@ -274,7 +248,6 @@ function openOption(evt, option) {
     }
 
     trip.destination = destTemp;
-  
   }
 
   function validateInputs(){
@@ -309,21 +282,13 @@ function openOption(evt, option) {
     console.log("error in postData", error);
     }
 }
-
   //vai para o utils
   function saveTravel(event){
-
     event.preventDefault();
         
     let form = document.getElementById("add_travel");
     let divsFather = form.getElementsByClassName("destinations_childs");
-
-    
-
-
-
-    
-      
+          
     if(validateInputs()){     
 
       trip.trip_name = form.querySelector(".trip_name").value;
@@ -346,20 +311,14 @@ function openOption(evt, option) {
           trip.destination[div.getAttribute('data-index')][element.className] = element.value;
           element.value="";
         } 
-
       }      
-      
       alert("Informations save");
-
       console.log(JSON.stringify(trip.destination)+" in client");
-
       postData('http://localhost:8081/save',trip);
 
     }else{
       alert("Fill all inputs with *");
     }
-
-    
   }
  
 

@@ -124,8 +124,9 @@ form#trips {
             grid-area: im;
             margin: 0;
             background-size:cover;
-            
-           
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: "";          
             margin-right: 5px;
             margin-bottom: 5px;
         }
