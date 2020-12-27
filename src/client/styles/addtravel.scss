@@ -1,0 +1,167 @@
+*{
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+form#add_travel {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    margin: 0 auto;
+
+    .trip_name{
+        border: 2px solid orange;
+        font-size: 30px;
+        margin-bottom: 50px;
+       
+
+    }
+
+    .destinations_childs{
+        display: grid;
+        width: 100%;
+        grid-template-columns: 20% 15% 20% 25% 20%;
+        grid-auto-rows: minmax(35px,auto);     
+        background-color: inherit;
+        margin-bottom: 50px;
+        position: relative;
+        grid-template-areas: 
+        "im cn st ct dt"
+        "im ac ac ac ft"
+        "im hn hn ci co"
+        "im li li li li"
+        "im pc pc pc pc"
+        "nt nt nt nt nt"
+        "da da da da da";
+               
+    
+        .destination_number{
+            position: absolute;
+            right: 0;
+            top: -35px;
+        
+        }
+
+        .search_location{
+            position: absolute;
+            left: 0;
+            top: -35px;
+            color: red;              
+        }
+
+        .search_location:hover{
+            cursor: pointer;              
+        }
+
+        &:hover{
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+        input, textarea{
+
+            border: 2px solid orange;
+            font-size: large;    
+            resize: none;    
+        }    
+
+        .country{
+
+            grid-area: cn;
+        }
+
+        .state{
+
+            grid-area: st;
+
+        }
+
+        .city{
+
+            grid-area: ct;
+
+        }
+        
+        .date{
+            grid-area: dt;
+        }
+    
+        .company{
+            grid-area: ac;
+        }
+    
+        .board_time{
+            grid-area: ft;
+        }
+    
+        .hotel_name{
+            grid-area: hn;
+    
+        }
+        .check_in{
+            grid-area: ci;
+        }
+    
+        .check_out{
+            grid-area: co;
+            
+        }
+    
+        .lodgind_info{
+            grid-area: li;
+            
+    
+        }
+    
+        .packing_list{
+            grid-area: pc;
+        }
+    
+        .notes{
+            grid-area: nt;
+    
+        }
+    
+        .image{  
+            grid-area: im;
+            margin: 0;
+            background-size:cover;
+            border: 2px solid orange;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-image: "";
+        }
+           
+        .delete_travel{
+    
+            grid-area: da;
+    
+        }
+    
+        .delete_travel{
+    
+            color: #990000;
+        }
+        
+        button {
+            font-size: 15px;
+            line-height: 28px;
+            font-weight: 500;
+            border-radius: 2px;
+            margin: 0;
+            white-space: nowrap;
+            background-color: #0071c2;
+        }
+    
+        button:hover{
+            background-color:#0033cc;
+    
+        }
+    }
+    
+    
+
+   
+
+
+
+}
+

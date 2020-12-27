@@ -1,0 +1,139 @@
+form#trips {
+    display: flex;
+  
+    margin: 0 auto;
+    width: 600px;
+
+    flex-direction: column;
+
+
+        
+    
+    .trip_name{
+
+        height: 100px;
+        margin-top: 50px;
+        border: 1px solid #CCC; 
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); 
+
+        &:hover{          
+            cursor: pointer;
+        }     
+
+    }
+    
+
+
+    .destinations_childs{
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+        grid-auto-rows: minmax(35px,auto);  
+        border: 1px solid #CCC;   
+        background-color: inherit;
+        position: relative;
+        margin-top: 15px;
+        padding: 10px;
+        grid-template-areas:
+        "im ad ad dt"
+        "im ac ac ft"
+        "im hn ci co"
+        "im li li li"
+        "im pc pc pc"
+        "nt nt nt nt"
+        "ab ab ab ab";
+       
+
+        .destination_number{
+            position: absolute;
+            right: 0px;
+            top: -15px;
+        }
+
+        &:hover{          
+            cursor: pointer;
+        }
+  
+
+        p{
+            margin: 0;
+            font-size: 10px;
+        }
+    
+        span{
+    
+            font-size: 13px;
+        }
+    
+    
+        
+
+        div{
+
+            border-bottom: 1px solid #CCC;
+    
+        }
+
+
+        .address{
+
+            grid-area: ad;     
+        }
+    
+        .date{
+            grid-area: dt;
+        }
+    
+        .company{
+            grid-area: ac;
+        }
+    
+        .board_time{
+            grid-area: ft;
+        }
+    
+        .hotel_name{
+            grid-area: hn;
+    
+        }
+        .check_in{
+            grid-area: ci;
+        }
+    
+        .check_out{
+            grid-area: co;
+            
+        }
+    
+        .lodgind_info{
+            grid-area: li;
+            
+    
+        }
+    
+        .packing_list{
+            grid-area: pc;
+        }
+    
+        .notes{
+            grid-area: nt;
+            height: 50px;
+    
+        }
+    
+        .image{  
+            grid-area: im;
+            margin: 0;
+            background-size:cover;
+            
+           
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+
+        .about{
+            grid-area: ab;
+            height: 100px;
+        }
+
+    }
+}

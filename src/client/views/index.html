@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Travel App</title>  
+    </head>
+    <body>
+        <header>      
+            <h1>Travel App</h1>             
+        </header>
+        <main>  
+            <div class="tab">
+                <button class="tablinks" onclick="Client.openOption(event, 'new-travel')">Add or edit trip</button>
+                <button class="tablinks" onclick="Client.openOption(event, 'my-travel')">My travel planner</button>   
+                <button class="tablinks save_trip" onclick="return Client.saveTravel(event)">Save trip</button>    
+                <button class="tablinks add_destination" onclick="return Client.addDestination(event)">Add destination</button>                
+            </div>           
+            <div id="new-travel" class="tabcontent">
+                
+                <form id = "add_travel">         
+                      
+                    <input class="trip_name" type="text" name="input" placeholder="Trip name*" data-index='0'>     
+                    <div class="destinations_childs" onkeydown="Client.inputChanged(event)" data-index='0'>
+                        <p class = "search_location" onclick="return Client.getAddress(event)"><strong>Search location</strong></p> 
+                        <p class = "destination_number"><strong>Destination 1</strong></p>                            
+                        <figure class = "image"></figure>  
+                        <input class="country" list = "countries" name="country" placeholder="Country*" > 
+                        <datalist id="countries">                            
+                        </datalist>
+                        <input class="city" list = "cities" name="city" placeholder="City*"> 
+                        <datalist id="cities">                            
+                        </datalist>                                                                                
+                        <input class="state" list = "states" name="state" placeholder="State*" > 
+                        <datalist id="states">                            
+                        </datalist>
+                        <input class="date" type="text" name="input" placeholder="Date*" onfocus="(this.type='date')" onblur="(this.type='text')">
+                        <input class="company" type="text" name="input" placeholder="Flight or bus info*">              
+                        <input class="hotel_name" type="text" name="input" placeholder="Hotel name*"> 
+                        <input class="check_in" type="text" name="input" placeholder="Check in*" onfocus="(this.type='date')" onblur="(this.type='text')">
+                        <input class="check_out" type="text" name="input" placeholder="Check out*" onfocus="(this.type='date')" onblur="(this.type='text')">
+                        <input class="board_time" type="text" name="input" placeholder="Time*" onfocus="(this.type='time')" onblur="(this.type='text')">      
+                        <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
+                        <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
+                        <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>                                         
+                        
+                    </div>
+                    
+                </form>                             
+            </div>
+                  
+            <div id="my-travel" class="tabcontent">
+                
+                <form id = "trips">  
+                    
+                     
+                </form>
+                          
+            </div> 
+       
+        </main>
+        
+
+
+        <script>
+            // Check that service workers are supported
+           /* if ('serviceWorker' in navigator) {
+                // Use the window load event to keep the page load performant
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/service-worker.js');
+                });
+            }*/
+        </script> 
+        
+        <footer class = 'footer'>
+            <p>Copyright</p>      
+        </footer>
+    </body>
+</html>

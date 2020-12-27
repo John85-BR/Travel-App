@@ -1,0 +1,65 @@
+const path = require('path');
+const dotenv = require('dotenv');
+const express = require('express');
+const app = express();
+const fetch = require("node-fetch");
+dotenv.config();
+let tripsData = [];
+
+/* Middleware*/
+//Here we are configuring express to use body-parser as middle-ware.
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+// Cors for cross origin allowance
+const cors = require('cors');
+app.use(cors());
+
+// Initialize the main project folder
+app.use(express.static('dist'));
+console.log(__dirname);
+
+app.get('/', (req, res)=> {
+   res.sendFile(path.resolve('src/client/views/index.html'));
+});
+const port = 8081;
+// designates what port the app will listen to for incoming requests
+app.listen(port, () =>{
+    console.log(`Example app listening on port ${port}!`);
+});
+
+app.post('/save', (req, res) =>{
+   
+    tripsData.push(req.body);
+  
+});
+
+app.post('/post_pixabay', async (req, res) =>{
+   
+    console.log(req.body.textContent);
+    const str = req.body.textContent;
+    
+    console.log(process.env.API_KEY_PIXABAY);
+    
+    const url = `https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&q=${str}&image_type=photo`;
+
+    const response = await fetch(url);
+    
+    try{    
+           
+        const data = await response.json();   
+        res.send(data);
+    }catch(error){
+        console.log(error);
+      // appropriately handle the error
+      //alert the user
+        //alert('Error while sending data by the server');
+    } 
+});
+
+app.get('/get', (req, res) =>{
+   
+    res.send(tripsData);
+  
+});
+
