@@ -52,7 +52,7 @@ let trip={
       let content=country.value.replace(/ /g,"+")+"+"+state.value.replace(/ /g,"+")+"+"+city.value.replace(/ /g,"+");
       alert(content);
           
-      getAPIData(`https://pixabay.com/api/?key=19665690-5244963ad9ee949591bbe5ec8&q=${content}&image_type=photo`)
+      postData('http://localhost:8081/post_pixabay',{textContent:content})
       .then(data=>{           
         let str = data.hits[0].webformatURL;
         alert(str);

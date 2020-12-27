@@ -36,12 +36,8 @@ app.post('/save', (req, res) =>{
 
 app.post('/post_pixabay', async (req, res) =>{
    
-    console.log(req.body.textContent);
-    const str = req.body.textContent;
-    
-    console.log(process.env.API_KEY_PIXABAY);
-    
-    const url = `https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&q=${str}&image_type=photo`;
+    const norm = req.body.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’#!'$%\^&\*;:{}=\-–_`´~()]/g,"");       
+    const url = `https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&q=${norm}&image_type=photo`;
 
     const response = await fetch(url);
     
