@@ -37,7 +37,7 @@ app.post('/save', (req, res) =>{
 app.post('/post_pixabay', async (req, res) =>{
    
     const norm = req.body.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’#!'$%\^&\*;:{}=\-–_`´~()]/g,"");       
-    const url = `https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&q=${norm}&image_type=photo`;
+    const url = `https://pixabay.com/api/?key=${process.env.API_KEY_PIXABAY}&q=${norm}&image_type=travel`;
 
     const response = await fetch(url);
     
@@ -47,9 +47,23 @@ app.post('/post_pixabay', async (req, res) =>{
         res.send(data);
     }catch(error){
         console.log(error);
-      // appropriately handle the error
-      //alert the user
-        //alert('Error while sending data by the server');
+    } 
+});
+
+
+app.post('/post_geonames', async (req, res) =>{
+   
+    const norm = req.body.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’#!'$%\^&\*;:{}=\-–_`´~()]/g,"");       
+    const url = `http://api.geonames.org/searchJSON?q=${norm}&maxRows=10&username=jbezerrajr`;
+
+    const response = await fetch(url);
+    
+    try{    
+           
+        const data = await response.json();   
+        res.send(data);
+    }catch(error){
+        console.log(error);
     } 
 });
 

@@ -1,9 +1,10 @@
+let d = new Date();
+let newDate = (d.getMonth()+1)+'/'+ d.getDate()+'/'+ d.getFullYear();
+
 let trip={
       trip_name:"",
       destination:[{
-        country:"",
-        state:"",
-        city:"",       
+        address:"",            
         date:"",
         company:"",
         board_time:"",
@@ -16,9 +17,7 @@ let trip={
       }]    
     };
     
-    const blankDestination={ country:"",
-    state:"",
-    city:"",
+    const blankDestination={ address:"",
     date:"",
     company:"",
     board_time:"",
@@ -36,29 +35,102 @@ let trip={
 
 
   function getAddress(event){
+
+    event.preventDefault();
  
     let imagem = event.target.parentElement.parentElement.querySelector(".image");
-    let country = event.target.parentElement.parentElement.querySelector(".country");
-    let state = event.target.parentElement.parentElement.querySelector(".state");
-    let city = event.target.parentElement.parentElement.querySelector(".city");
-    let index = event.target.parentElement.parentElement.getAttribute("data-index");
-    
-    if(country.value.length>3 && state.value.length>3 && city.value.length>3 && imagem.style.backgroundImage ==""){
+    let address = event.target.parentElement.parentElement.querySelector(".address");
 
-      let content=country.value.replace(/ /g,"+")+"+"+state.value.replace(/ /g,"+")+"+"+city.value.replace(/ /g,"+");         
-      postData('http://localhost:8081/post_pixabay',{textContent:content})
-      .then(data=>{           
-        let str = data.hits[0].webformatURL;    
-        imagem.style.backgroundImage = 'url('+str+')';
+
+    let temp = address.value.trim().split(",");
+    let results = 0
+    for(let item of temp){
+      if(item!=""){
+        ++results;
+      }
+    }
+    
+    
+    
+    if(results==3 && imagem.style.backgroundImage ==""){
+
+      let content=address.value.replace(/ /g,"+").replace(/,/g,"");  
       
+      alert(content);
+      postData('http://localhost:8081/post_pixabay',{textContent:content})
+      .then(data=>{                    
+        if(parseInt(data.totalHits) > 0){        
+          let str = data.hits[0].webformatURL;           
+          imagem.style.backgroundImage = 'url('+str+')';
+
+        }else{
+          alert("No images available");
+        }                
       });
+
+      getAPIData(`http://api.geonames.org/searchJSON?q=${address.value}&maxRows=1&isNameRequired=true&username=jbezerrajr`)
+      .then(data=>{
+
+        if(data.totalResultsCount>0){
+
+          getAPIData(`http://api.geonames.org/searchJSON?q=${address.value}&maxRows=1&isNameRequired=true&username=jbezerrajr`)
+          .then(tempData=>{
+
+          });
+        }
+
+
+      });
+
+
+
+
+
+    }else{
+      alert("Insert the City, State and Country");
     }
   }
 
   function inputChanged(event){
     let imagem = event.target.parentElement.querySelector(".image");
-    if(event.target.className=="country" || event.target.className=="state" || event.target.className=="city"){
-      imagem.style.backgroundImage = "";
+    let address = event.target.parentElement.querySelector(".address");
+    let options = ``;
+    let datalist = document.getElementById("autocomplete_places"); 
+        
+
+    if(event.target.className=="address"){
+      
+      address.value = address.value.replace(/[\[\]¨+\-.@º"§’#!?'$%^&*;:{}=\-–_><`´~()1234567890¹²³£¢¬ª|]/g,"");
+      address.value = address.value.replace(/\s\s/g," ");
+      address.value = address.value.replace(/,,/g,",");
+
+      let temp = address.value.trim().split(",");
+      let results = 0;
+      for(let item of temp){
+        if(item!=""){
+          ++results;
+        }
+      }
+
+ 
+
+      /*postData('http://localhost:8081/post_geonames',{textContent:address.value})
+      .then(data=>{   
+        
+        
+        if(parseInt(data.totalResultsCount) > 0 && results>1){      
+          for(let item of data.geonames){
+            let str = item.toponymName+", "+item.adminName1+", "+item.countryName;
+            alert(str);
+            options += `<option value=${str}>`;
+          }  
+         
+          datalist.innerHTML=options;
+
+        }         
+      });*/
+
+      imagem.style.backgroundImage="";
     }   
   }
   
@@ -73,17 +145,6 @@ const getAPIData = async (url)=>{
     alert('.');
   }
 }
-
-function updateDatalist(data){
-  let option = ``;
-  let countryDataList = document.getElementById("countries"); 
-
-  for(let item of data){
-    option+=`<option value=${item.name}>`;
-  }
-  countryDataList.innerHTML=option;
-}
-
 
 function openOption(evt, option) {
     var i, tabcontent, tablinks;
@@ -106,36 +167,40 @@ function openOption(evt, option) {
       trip.destination.push(blankDestination);
       
       saveTripButton.style.display = "block";   
-      addDestButton.style.display = "block";
- 
-      getAPIData('https://restcountries.eu/rest/v2/all')
-      .then(data=>{
-        updateDatalist(data);
-      });
+      addDestButton.style.display = "block";  
     }
 
     if(evt.currentTarget.textContent=="My travel planner"){
       saveTripButton.style.display = "none";
-      addDestButton.style.display = "none";     
+      addDestButton.style.display = "none";   
+
       addTravel.innerHTML=`<input class="trip_name" type="text" name="input" placeholder="Trip name*" data-index='0'>     
-      <div class="destinations_childs" data-index='0' onkeydown="Client.inputChanged(event)">
-          <p class = "search_location" onclick="return Client.getAddress(event)"><strong>Search location</strong></p> 
-          <p class = "destination_number"><strong>Destination 1</strong></p>
-          <figure class = "image"></figure>                                                                                  
-          <input class="country" type="text" name="input" placeholder="Country*" > 
-          <input class="city" type="text" name="input" placeholder="City*" >                                                                                 
-          <input class="state" type="text" name="input" placeholder="State*" > 
-          <input class="date" type="text" name="input" placeholder="Date*" onfocus="(this.type='date')" onblur="(this.type='text')">
-          <input class="company" type="text" name="input" placeholder="Flight or bus info*">              
-          <input class="hotel_name" type="text" name="input" placeholder="Hotel name*"> 
-          <input class="check_in" type="text" name="input" placeholder="Check in*" onfocus="(this.type='date')" onblur="(this.type='text')">
-          <input class="check_out" type="text" name="input" placeholder="Check out*" onfocus="(this.type='date')" onblur="(this.type='text')">
-          <input class="board_time" type="text" name="input" placeholder="Time*" onfocus="(this.type='time')" onblur="(this.type='text')">      
-          <textarea class = "lodgind_info" type="text" name="input" placeholder="Lodgind info" rows="3" cols="33"></textarea>
-          <textarea class = "packing_list" type="text" name="input" placeholder="Packing list" rows="3" cols="33"></textarea>
-          <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>                                         
-          
-      </div>`;
+                    <div class="destinations_childs" onkeyup="Client.inputChanged(event)" data-index='0'>
+                        <button class = "search_location" onclick="return Client.getAddress(event)"><strong>Search</strong></button> 
+                        <p class = "destination_number"><strong>Destination 1</strong></p>                            
+                        <figure class = "image"></figure>  
+                        <input class="address" type="text" name="input" placeholder="Country, state, city*">
+                        <input class="date" type="text" name="input" placeholder="Date*" onfocus="(this.type='date')" onblur="(this.type='text')">
+                        <input class="company" type="text" name="input" placeholder="Flight or bus info*">              
+                        <input class="hotel_name" type="text" name="input" placeholder="Hotel name*"> 
+                        <input class="check_in" type="text" name="input" placeholder="Check in*" onfocus="(this.type='date')" onblur="(this.type='text')">
+                        <input class="check_out" type="text" name="input" placeholder="Check out*" onfocus="(this.type='date')" onblur="(this.type='text')">
+                        <input class="board_time" type="text" name="input" placeholder="Time*" onfocus="(this.type='time')" onblur="(this.type='text')">      
+                        <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
+                        <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
+                        <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>
+                        <table class = "table_weather"> 
+                            <caption>Forecast weather - 16 days</caption>                      
+                            <tr>
+                                <th class = "date_table">Date:</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th class = "temp_table">Temp:</th>
+                                <td></td>
+                            </tr>
+                        </table></div>`;                                                             
+                    
       myTravel.innerHTML="";
    
       getAPIData('http://localhost:8081/get')
@@ -160,20 +225,17 @@ function openOption(evt, option) {
         let element = document.createElement('div');
         element.classList.add("destinations_childs");
         element.setAttribute("data-index",tripUnit.destination.indexOf(destination));
-        let imageUrl = "";
-
-        let address = `${destination.country}, ${destination.state}, ${destination.city}`;
-
-        let content=destination.country.replace(/ /g,"+")+"+"+destination.state.replace(/ /g,"+")+"+"+destination.city.replace(/ /g,"+");         
+          
+        let content=destination.address.replace(/ /g,"+").replace(/,/g,""); 
         postData('http://localhost:8081/post_pixabay',{textContent:content})
         .then(data=>{           
           let str = data.hits[0].webformatURL;    
-          imageUrl = 'url('+str+')'; 
+          let imageUrl = 'url('+str+')'; 
 
           let newElement = `<p class = "destination_number">
           <strong>Destination ${tripUnit.destination.indexOf(destination)+1}</strong></p>
           <figure class = "image" style="background-image:${imageUrl};"></figure>
-          <div class="address"><p><strong>Destination</strong></p><span>${address}</span></div> 
+          <div class="address"><p><strong>Destination</strong></p><span>${destination.address}</span></div> 
           <div class="date"><p><strong>Date</strong></p><span>${destination.date}</span></div> 
           <div class="company"><p><strong>Company</strong></p><span>${destination.company}</span></div>            
           <div class="hotel_name"><p><strong>Hotel</strong></p><span>${destination.hotel_name}</span></div> 
@@ -200,31 +262,38 @@ function openOption(evt, option) {
     destination.setAttribute('data-index',trip.destination.length-1);
     let temp = parseInt(destination.getAttribute('data-index'))+1;
 
-    let newDestination = `<p class = "search_location" onclick="return Client.getAddress(event)"><strong>Search location</strong>
-    </p> <p class = "destination_number">
-    <strong>Destination ${temp}</strong></p><figure class = "image"></figure>  
-    <input class="country" list = "countries" name="country" placeholder="Country*" > 
-    <datalist id="countries">                            
-    </datalist>
-    <input class="city" list = "cities" name="city" placeholder="City*" > 
-    <datalist id="cities">                            
-    </datalist>                                                                                
-    <input class="state" list = "states" name="state" placeholder="State*" > 
-    <datalist id="states">                            
-    </datalist>
-    <input class="date" type="text" name="input" placeholder="Date*" onfocus="(this.type='date')" onblur="(this.type='text')">
-    <input class="company" type="text" name="input" placeholder="Flight or bus info*">              
-    <input class="hotel_name" type="text" name="input" placeholder="Hotel name*"> 
-    <input class="check_in" type="text" name="input" placeholder="Check in*" onfocus="(this.type='date')" onblur="(this.type='text')">
-    <input class="check_out" type="text" name="input" placeholder="Check out*" onfocus="(this.type='date')" onblur="(this.type='text')">
-    <input class="board_time" type="text" name="input" placeholder="Time*" onfocus="(this.type='time')" onblur="(this.type='text')">      
-    <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
-    <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
-    <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>                                         
-    <button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button>` ;
+    let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)"><strong>Search</strong></button> 
+        <p class = "destination_number"><strong>Destination ${temp}</strong></p>                            
+        <figure class = "image"></figure>  
+        <input list = "autocomplete_places" class="address" type="text" name="input" placeholder="City, State, Country*">
+        <datalist id="autocomplete_places">                           
+        </datalist>
+        <input class="date" type="text" name="input" placeholder="Date*" onfocus="(this.type='date')" onblur="(this.type='text')">
+        <input class="company" type="text" name="input" placeholder="Flight or bus info*">              
+        <input class="hotel_name" type="text" name="input" placeholder="Hotel name*"> 
+        <input class="check_in" type="text" name="input" placeholder="Check in*" onfocus="(this.type='date')" onblur="(this.type='text')">
+        <input class="check_out" type="text" name="input" placeholder="Check out*" onfocus="(this.type='date')" onblur="(this.type='text')">
+        <input class="board_time" type="text" name="input" placeholder="Time*" onfocus="(this.type='time')" onblur="(this.type='text')">      
+        <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
+        <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
+        <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>  
+        <table class = "table_weather">   
+                            <caption>Forecast weather - 16 days</caption>                      
+                            <tr>
+                                <th class = "date_table">Date:</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th class = "temp_table">Temp:</th>
+                                <td></td>
+                            </tr>
+                        </table>
+        <button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button>                                       
+        
+    </div>` ;
 
     destination.innerHTML=newDestination;
-    destination.addEventListener("keydown", (event)=>{    
+    destination.addEventListener("keyup", (event)=>{    
       Client.inputChanged(event);
     });
     addTravel.appendChild(destination);

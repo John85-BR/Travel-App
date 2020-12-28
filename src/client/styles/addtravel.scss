@@ -19,20 +19,27 @@ form#add_travel {
     .destinations_childs{
         display: grid;
         width: 100%;
-        grid-template-columns: 20% 15% 20% 25% 20%;
+        grid-template-columns: 20% 20% 20% 20% 20%;
         grid-auto-rows: minmax(35px,auto);     
         background-color: inherit;
         margin-bottom: 50px;
         position: relative;
         grid-template-areas: 
-        "im cn st ct dt"
-        "im ac ac ac ft"
+        "im ad ad ad se"
+        "im ac ac dt ft"
         "im hn hn ci co"
         "im li li li li"
         "im pc pc pc pc"
         "nt nt nt nt nt"
+        "cw cw cw cw cw"
         "da da da da da";
                
+        .table_weather{          
+            grid-area: cw;
+            height: auto;  
+                       
+    
+        }
     
         .destination_number{
             position: absolute;
@@ -42,10 +49,8 @@ form#add_travel {
         }
 
         .search_location{
-            position: absolute;
-            left: 0;
-            top: -35px;
-            color: red;              
+            grid-area: se;
+            color:azure;              
         }
 
         .search_location:hover{
@@ -56,6 +61,16 @@ form#add_travel {
             box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
         }
 
+        table, th, td{
+            border: 2px solid orange;
+            border-collapse: collapse;
+        }
+
+        th, td{
+            padding: 5px;
+            text-align: left; 
+        }
+
         input, textarea{
 
             border: 2px solid orange;
@@ -63,21 +78,9 @@ form#add_travel {
             resize: none;    
         }    
 
-        .country{
+        .address{
 
-            grid-area: cn;
-        }
-
-        .state{
-
-            grid-area: st;
-
-        }
-
-        .city{
-
-            grid-area: ct;
-
+            grid-area: ad;
         }
         
         .date{

@@ -21,18 +21,12 @@
                 <form id = "add_travel">         
                       
                     <input class="trip_name" type="text" name="input" placeholder="Trip name*" data-index='0'>     
-                    <div class="destinations_childs" onkeydown="Client.inputChanged(event)" data-index='0'>
-                        <p class = "search_location" onclick="return Client.getAddress(event)"><strong>Search location</strong></p> 
+                    <div class="destinations_childs" onkeyup="Client.inputChanged(event)" data-index='0'>
+                        <button class = "search_location" onclick="return Client.getAddress(event)"><strong>Search</strong></button> 
                         <p class = "destination_number"><strong>Destination 1</strong></p>                            
                         <figure class = "image"></figure>  
-                        <input class="country" list = "countries" name="country" placeholder="Country*" > 
-                        <datalist id="countries">                            
-                        </datalist>
-                        <input class="city" list = "cities" name="city" placeholder="City*"> 
-                        <datalist id="cities">                            
-                        </datalist>                                                                                
-                        <input class="state" list = "states" name="state" placeholder="State*" > 
-                        <datalist id="states">                            
+                        <input list = "autocomplete_places" class="address" type="text" name="input" placeholder="City, State, Country*">
+                        <datalist id="autocomplete_places">                           
                         </datalist>
                         <input class="date" type="text" name="input" placeholder="Date*" onfocus="(this.type='date')" onblur="(this.type='text')">
                         <input class="company" type="text" name="input" placeholder="Flight or bus info*">              
@@ -42,8 +36,20 @@
                         <input class="board_time" type="text" name="input" placeholder="Time*" onfocus="(this.type='time')" onblur="(this.type='text')">      
                         <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
                         <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
-                        <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>                                         
-                        
+                        <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>  
+                        <table class = "table_weather">   
+                            <caption>Forecast weather - 16 days</caption>                      
+                            <tr>
+                                <th class = "date_table">Date:</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th class = "temp_table">Temp:</th>
+                                <td></td>
+                            </tr>
+                        </table>    
+                    
+                        </div>                                                                                 
                     </div>
                     
                 </form>                             
