@@ -40,7 +40,21 @@ form#trips {
         "im li li li"
         "im pc pc pc"
         "nt nt nt nt"
-        "ab ab ab ab";
+        "ab ab ab ab"
+        "cw cw cw cw";
+
+        .table_weather{
+            grid-area: cw;
+            height: auto;
+            border: 1px solid #CCC;
+            overflow-x:auto;        
+        }
+
+        table, th, td{
+            border: 1px solid #CCC;
+            border-collapse: collapse;
+            width: 100%;
+        }
        
 
         .destination_number{

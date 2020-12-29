@@ -13,7 +13,9 @@ let trip={
         check_out:"",
         lodgind_info:"",
         packing_list:"",
-        notes:""  
+        notes:"",
+        table_date:"",
+        table_temp:""  
       }]    
     };
     
@@ -26,7 +28,9 @@ let trip={
     check_out:"",
     lodgind_info:"",
     packing_list:"",
-    notes:""
+    notes:"",
+    table_date:"",
+    table_temp:""
   };
 
   let footer = document.querySelector('.footer');
@@ -38,9 +42,10 @@ let trip={
 
     event.preventDefault();
  
-    let imagem = event.target.parentElement.parentElement.querySelector(".image");
-    let address = event.target.parentElement.parentElement.querySelector(".address");
-
+    let imagem = event.target.parentElement.querySelector(".image");
+    let address = event.target.parentElement.querySelector(".address");
+    let tableHDate = event.target.parentElement.querySelector(".date_table");
+    let tableHTemp = event.target.parentElement.querySelector(".temp_table");
 
     let temp = address.value.trim().split(",");
     let results = 0
@@ -49,8 +54,6 @@ let trip={
         ++results;
       }
     }
-    
-    
     
     if(results==3 && imagem.style.backgroundImage ==""){
 
@@ -71,12 +74,29 @@ let trip={
       getAPIData(`http://api.geonames.org/searchJSON?q=${address.value}&maxRows=1&isNameRequired=true&username=jbezerrajr`)
       .then(data=>{
 
-        if(data.totalResultsCount>0){
+        if(data.totalResultsCount>0){       
 
-          getAPIData(`http://api.geonames.org/searchJSON?q=${address.value}&maxRows=1&isNameRequired=true&username=jbezerrajr`)
+          getAPIData(`https://api.weatherbit.io/v2.0/forecast/daily?&lat=${data.geonames[0].lat}&lon=${data.geonames[0].lng}&key=72e60b68280146b8bfd7bef572fc91a0`)
           .then(tempData=>{
 
+            let strTemp = `<th>Temp:</th>`;
+            let strDate = `<th>Date:</th>`;
+
+            for(let temp of tempData.data){
+              strDate+=`<td>${temp.valid_date}</td>`;
+              strTemp+=`<td>${temp.temp}</td>`;              
+            }
+
+            const index = event.target.parentElement.getAttribute("data-index");
+
+            trip.destination[index].table_date = strDate;
+            trip.destination[index].table_temp = strTemp;
+
+            tableHDate.innerHTML=strDate;
+            tableHTemp.innerHTML=strTemp;
+
           });
+               
         }
 
 
@@ -189,17 +209,18 @@ function openOption(evt, option) {
                         <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
                         <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
                         <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>
-                        <table class = "table_weather"> 
-                            <caption>Forecast weather - 16 days</caption>                      
-                            <tr>
-                                <th class = "date_table">Date:</th>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th class = "temp_table">Temp:</th>
-                                <td></td>
-                            </tr>
-                        </table></div>`;                                                             
+                        <div style="overflow-x:auto;" class = "table_weather">
+                            <table>                                                  
+                                <tr class = "date_table">
+                                
+                                    
+                                </tr>
+                                <tr class = "temp_table">
+                                
+                                    
+                                </tr>
+                            </table>    
+                        </div></div>`;                                                             
                     
       myTravel.innerHTML="";
    
@@ -245,7 +266,10 @@ function openOption(evt, option) {
           <div class = "lodgind_info"><p><strong>Lodgind info</strong></p><span>${destination.lodgind_info}</span></div>
           <div class = "packing_list"><p><strong>Packing list</strong></p><span>${destination.packing_list}</span></div>
           <div class = "notes"><p><strong>Notes</strong></p><span>${destination.notes}</span></div>
-          <div class = "about"><p><strong>About the place</strong></p><span>Name</span></div>`;                
+          <div class = "about"><p><strong>About the place</strong></p><span>Name</span></div>
+          <div class = "table_weather"><table>                                                  
+          <tr class = "date_table">${destination.table_date}</tr><tr class = "temp_table">${destination.table_temp}                                                                 
+          </tr></table></div>`;                
           element.innerHTML=newElement; 
           myTravel.appendChild(element);
 
@@ -277,17 +301,18 @@ function openOption(evt, option) {
         <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
         <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
         <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>  
-        <table class = "table_weather">   
-                            <caption>Forecast weather - 16 days</caption>                      
-                            <tr>
-                                <th class = "date_table">Date:</th>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th class = "temp_table">Temp:</th>
-                                <td></td>
-                            </tr>
-                        </table>
+        <div style="overflow-x:auto;" class = "table_weather">
+                            <table>                                                  
+                                <tr class = "date_table">
+                                
+                                    
+                                </tr>
+                                <tr class = "temp_table">
+                                
+                                    
+                                </tr>
+                            </table>    
+                        </div>
         <button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button>                                       
         
     </div>` ;

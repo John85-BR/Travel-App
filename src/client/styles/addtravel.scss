@@ -36,9 +36,8 @@ form#add_travel {
                
         .table_weather{          
             grid-area: cw;
-            height: auto;  
-                       
-    
+            height: auto;
+            overflow-x:auto;  
         }
     
         .destination_number{
@@ -64,8 +63,10 @@ form#add_travel {
         table, th, td{
             border: 2px solid orange;
             border-collapse: collapse;
+            width: 100%;
         }
 
+     
         th, td{
             padding: 5px;
             text-align: left; 
