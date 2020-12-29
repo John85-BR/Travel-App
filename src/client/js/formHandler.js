@@ -3,7 +3,7 @@ let newDate = (d.getMonth()+1)+'/'+ d.getDate()+'/'+ d.getFullYear();
 
 let trip={
       trip_name:"",
-      destination:[{
+      destination:{
         address:"",            
         date:"",
         company:"",
@@ -16,7 +16,7 @@ let trip={
         notes:"",
         table_date:"",
         table_temp:""  
-      }]    
+      }    
     };
     
     const blankDestination={ address:"",
@@ -47,13 +47,17 @@ let trip={
     let tableHDate = event.target.parentElement.querySelector(".date_table");
     let tableHTemp = event.target.parentElement.querySelector(".temp_table");
 
-    let temp = address.value.trim().split(",");
-    let results = 0
-    for(let item of temp){
-      if(item!=""){
-        ++results;
+    let results = 0;
+    alert(event.target.parentElement.className);
+    if(address.value!=""){
+      let temp = address.value.trim().split(",");    
+      for(let item of temp){
+        if(item!=""){
+          ++results;
+        }
       }
     }
+    
     
     if(results==3 && imagem.style.backgroundImage ==""){
 
@@ -86,7 +90,6 @@ let trip={
               strDate+=`<td>${temp.valid_date}</td>`;
               strTemp+=`<td>${temp.temp}</td>`;              
             }
-
             const index = event.target.parentElement.getAttribute("data-index");
 
             trip.destination[index].table_date = strDate;
@@ -111,14 +114,64 @@ let trip={
     }
   }
 
+  function saveData(){
+
+    
+    let form = document.getElementById("add_travel");
+    let divsFather = form.getElementsByClassName("destinations_childs");
+          
+  
+
+    trip.trip_name = form.querySelector(".trip_name").value;
+
+
+    for(let div of divsFather){
+        
+      let elementsInput = div.getElementsByTagName('input');
+      let elementsTextarea = div.getElementsByTagName('textarea');
+
+      let tempDestination={ address:"",
+          date:"",
+          company:"",
+          board_time:"",
+          hotel_name:"",
+          check_in:"",
+          check_out:"",
+          lodgind_info:"",
+          packing_list:"",
+          notes:"",
+          table_date:"",
+          table_temp:""
+      };
+        
+
+      for(let element of elementsInput){          
+        tempDestination[element.className] = element.value;         
+                              
+      }
+      for(let element of elementsTextarea){
+        tempDestination[element.className] = element.value;
+      
+      } 
+      trip["destination"][div.getAttribute('data-index')]=tempDestination;
+    }      
+     
+   
+    alert(JSON.stringify(trip));
+    
+    
+  }
+
   function inputChanged(event){
     let imagem = event.target.parentElement.querySelector(".image");
     let address = event.target.parentElement.querySelector(".address");
     let options = ``;
     let datalist = document.getElementById("autocomplete_places"); 
+
+    saveData();
         
 
-    if(event.target.className=="address"){
+    if(event.target.className=="address" && event.target.value!=""){
       
       address.value = address.value.replace(/[\[\]¨+\-.@º"§’#!?'$%^&*;:{}=\-–_><`´~()1234567890¹²³£¢¬ª|]/g,"");
       address.value = address.value.replace(/\s\s/g," ");
@@ -196,7 +249,7 @@ function openOption(evt, option) {
 
       addTravel.innerHTML=`<input class="trip_name" type="text" name="input" placeholder="Trip name*" data-index='0'>     
                     <div class="destinations_childs" onkeyup="Client.inputChanged(event)" data-index='0'>
-                        <button class = "search_location" onclick="return Client.getAddress(event)"><strong>Search</strong></button> 
+                        <button class = "search_location" onclick="return Client.getAddress(event)">Search</button> 
                         <p class = "destination_number"><strong>Destination 1</strong></p>                            
                         <figure class = "image"></figure>  
                         <input class="address" type="text" name="input" placeholder="Country, state, city*">
@@ -237,7 +290,7 @@ function openOption(evt, option) {
       let tripName = document.createElement('div');
       tripName.classList.add("trip_name");
       tripName.setAttribute("data-index",data.indexOf(tripUnit));
-      console.log(tripUnit.name+" in update");
+      
       tripName.innerHTML = `<h1>${tripUnit.trip_name}</h1>`;
       myTravel.appendChild(tripName);
      
@@ -286,7 +339,7 @@ function openOption(evt, option) {
     destination.setAttribute('data-index',trip.destination.length-1);
     let temp = parseInt(destination.getAttribute('data-index'))+1;
 
-    let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)"><strong>Search</strong></button> 
+    let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)">Search</button> 
         <p class = "destination_number"><strong>Destination ${temp}</strong></p>                            
         <figure class = "image"></figure>  
         <input list = "autocomplete_places" class="address" type="text" name="input" placeholder="City, State, Country*">
@@ -329,20 +382,91 @@ function openOption(evt, option) {
     event.preventDefault();
 
     const index = event.target.parentElement.getAttribute('data-index');
+   
     delete trip.destination[index];
 
     addTravel.removeChild(event.target.parentElement);
 
     let destTemp =[];
 
-    for(destination of trip.destination){
-      if(destination!='undefined'){
+    
+
+    for(let destination of trip.destination){
+      if(destination!==undefined){
         destTemp.push(destination);
       }
     }
-
     trip.destination = destTemp;
+
+    
+
+   
+    
+    refreshTripsInAddTravel(trip,0);
+
+    
   }
+
+
+  function refreshTripsInAddTravel(actualTrip,index=0){
+
+    
+
+    addTravel.innerHTML="";
+
+    let tripName = document.createElement('input');
+    tripName.classList.add("trip_name");
+    tripName.setAttribute("data-index",index);
+    tripName.setAttribute("type","text");
+    tripName.setAttribute("name","input");
+    tripName.setAttribute("placeholder","Trip name*");
+    
+    addTravel.appendChild(tripName);
+
+    let count = 0;
+     
+    for(let destination of actualTrip.destination){
+
+      
+      let destinationFather = document.createElement('div');
+      destinationFather.classList.add("destinations_childs"); 
+
+      alert(destination.address);
+     
+      destinationFather.setAttribute("data-index",count);    
+      let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)"><strong>Search</strong></button> 
+        <p class = "destination_number"><strong>Destination ${count+1}</strong></p>                            
+        <figure class = "image"></figure>  
+        <input list = "autocomplete_places" class="address" type="text" name="input" placeholder="City, State, Country*" value="${destination.address}">
+        <datalist id="autocomplete_places">                           
+        </datalist>
+        <input class="date" type="text" name="input" placeholder="Date*" onfocus="(this.type='date')" onblur="(this.type='text')">
+        <input class="company" type="text" name="input" placeholder="Flight or bus info*">              
+        <input class="hotel_name" type="text" name="input" placeholder="Hotel name*"> 
+        <input class="check_in" type="text" name="input" placeholder="Check in*" onfocus="(this.type='date')" onblur="(this.type='text')">
+        <input class="check_out" type="text" name="input" placeholder="Check out*" onfocus="(this.type='date')" onblur="(this.type='text')">
+        <input class="board_time" type="text" name="input" placeholder="Time*" onfocus="(this.type='time')" onblur="(this.type='text')">      
+        <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
+        <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
+        <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>  
+        <div style="overflow-x:auto;" class = "table_weather"><table><tr class = "date_table"></tr><tr class = "temp_table"></tr></table></div>`;   
+
+        if(count>0){
+          newDestination+=`<button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button>`;   
+        }
+        
+        destinationFather.innerHTML=newDestination;
+        destinationFather.addEventListener("keyup", (event)=>{    
+          Client.inputChanged(event);
+        });
+        addTravel.appendChild(destinationFather);
+        count++;
+    }            
+  }
+
+
+
+
 
   function validateInputs(){
 
@@ -393,21 +517,33 @@ function openOption(evt, option) {
 
         let elementsInput = div.getElementsByTagName('input');
         let elementsTextarea = div.getElementsByTagName('textarea');
+
+        let tempDestination={ address:"",
+          date:"",
+          company:"",
+          board_time:"",
+          hotel_name:"",
+          check_in:"",
+          check_out:"",
+          lodgind_info:"",
+          packing_list:"",
+          notes:"",
+          table_date:"",
+          table_temp:""
+        };
         
 
-        for(let element of elementsInput){
-       
-          trip.destination[div.getAttribute('data-index')][element.className] = element.value;
-          element.value="";         
-                   
+        for(let element of elementsInput){          
+          tempDestination[element.className] = element.value;         
+          element.value="";                          
         }
         for(let element of elementsTextarea){
-          trip.destination[div.getAttribute('data-index')][element.className] = element.value;
+          tempDestination[element.className] = element.value;
           element.value="";
         } 
+        trip["destination"][div.getAttribute('data-index')]=tempDestination;
       }      
       alert("Informations save");
-      console.log(JSON.stringify(trip.destination)+" in client");
       postData('http://localhost:8081/save',trip);
 
     }else{
