@@ -1,0 +1,139 @@
+@media screen and (max-width: 820px) {
+    
+    main{
+        width: 700px;  
+    } 
+
+    form#add_travel, form#trips{
+
+        width: 700px;      
+    }
+
+    .tablinks{
+        font-size: 20px;     
+    }
+
+}
+
+
+
+@media screen and (max-width: 720px) {
+
+    main{
+        width: 500px; 
+    }  
+
+    .tab{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tablinks{
+        font-size: 15px;
+        
+    }
+
+    form#add_travel, form#trips {
+
+        width: 400px;          
+    }
+
+    form#trips {
+
+        .trip_name{
+            height: auto;   
+            font-size: 15px;      
+        }
+        
+        .destinations_childs{
+            grid-template-columns: 35% 65%;   
+            padding: 5px;
+            grid-template-areas:
+            "im ad"
+            "im ad"
+            "im ad"
+            "se se"
+            "cw cw"
+            "hn hn"
+            "ci co"
+            "ac ac"           
+            "dt dt"
+            "ft ft"
+            "li li"
+            "pc pc"
+            "nt nt";          
+        }        
+    }
+
+    form#add_travel{
+
+        .trip_name{
+            border: 1px solid orange;
+            font-size: 15px;      
+        }
+
+        .destinations_childs{
+            grid-template-columns: 35% 65%;
+            grid-template-areas: 
+            "im ad"
+            "im ad"
+            "im ad"
+            "se se"
+            "cw cw"
+            "hn hn"
+            "ci co"
+            "ac ac"           
+            "dt dt"
+            "ft ft"
+            "li li"
+            "pc pc"
+            "nt nt"
+            "da da";
+
+            .destination_number{
+                font-size: 10px;          
+            }
+
+            table, th, td{
+                border: 1px solid orange;
+            }
+    
+         
+            th, td{
+                padding: 2px;
+                text-align: left; 
+            }
+    
+            input, textarea{
+    
+                border: 1px solid orange;
+                font-size: small;      
+            }
+    
+            .image{           
+                border: 1px solid orange;      
+            }
+               
+            
+            button {
+                font-size: 10px;
+            }
+        }    
+    }
+
+}
+
+
+@media screen and (max-width: 470px) {  
+
+    main{
+        width: 270px; 
+    }  
+
+    form#add_travel, form#trips {
+
+        width: 250px;
+      
+    }  
+
+}

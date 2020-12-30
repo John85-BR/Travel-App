@@ -2,23 +2,23 @@
     font-family:Arial, Helvetica, sans-serif;
 }
 
+
 form#add_travel {
     display: flex;
-    flex-direction: column;
     width: 800px;
+    flex-direction: column;
     margin: 0 auto;
 
+    
     .trip_name{
         border: 2px solid orange;
         font-size: 30px;
         margin-bottom: 50px;
-       
-
+    
     }
 
     .destinations_childs{
         display: grid;
-        width: 100%;
         grid-template-columns: 20% 20% 20% 20% 20%;
         grid-auto-rows: minmax(35px,auto);     
         background-color: inherit;

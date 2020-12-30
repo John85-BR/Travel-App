@@ -2,6 +2,7 @@
 .tab {
     overflow: hidden;
     background-color: inherit;  
+
   }
   
   /* Style the buttons inside the tab */
@@ -28,7 +29,8 @@
     display: none;
     background-color: white;
     margin-top: 20px;
-    overflow-x: auto;
+   
+  
         
   }
 
@@ -47,6 +49,7 @@
 
   .tablinks:not(.save_trip):not(.add_destination){
     font-size: 15px;
+   
   }
 
   .tablinks:hover{

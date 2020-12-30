@@ -6,6 +6,7 @@ import './styles/header.scss';
 import './styles/tabs.scss';
 import './styles/addtravel.scss';
 import './styles/mytravel.scss';
+import './styles/mediascreen.scss';
 
 
 //remenber put exports here

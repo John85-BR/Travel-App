@@ -1,6 +1,5 @@
 form#trips {
     display: flex;
-  
     margin: 0 auto;
     width: 600px;
     flex-direction: column;
@@ -14,10 +13,6 @@ form#trips {
         margin-top: 50px;
         border: 1px solid #CCC; 
         box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2); 
-
-        &:hover{          
-            cursor: pointer;
-        }     
 
     }
     
@@ -38,8 +33,7 @@ form#trips {
         "im hn ci co"
         "im li li li"
         "im pc pc pc"
-        "nt nt nt nt"
-        "ab ab ab ab"
+        "nt nt nt nt"      
         "cw cw cw cw";
 
         .table_weather{
@@ -142,11 +136,6 @@ form#trips {
             background-image: "";          
             margin-right: 5px;
             margin-bottom: 5px;
-        }
-
-        .about{
-            grid-area: ab;
-            height: 100px;
         }
 
     }

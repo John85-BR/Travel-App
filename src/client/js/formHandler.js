@@ -1,6 +1,3 @@
-let d = new Date();
-const newDate = (d.getMonth()+1)+'-'+ d.getDate()+'-'+ d.getFullYear();
-
 let trip={
       trip_name:"",
       destination:[{
