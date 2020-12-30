@@ -34,6 +34,12 @@ app.post('/save', (req, res) =>{
   
 });
 
+app.post('/edit', (req, res) =>{
+   
+    tripsData[req.body.index]=req.body.trip;
+  
+});
+
 app.post('/post_pixabay', async (req, res) =>{
    
     const norm = req.body.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’#!'$%\^&\*;:{}=\-–_`´~()]/g,"");       
@@ -55,6 +61,21 @@ app.post('/post_geonames', async (req, res) =>{
    
     const norm = req.body.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’#!'$%\^&\*;:{}=\-–_`´~()]/g,"");       
     const url = `http://api.geonames.org/searchJSON?q=${norm}&maxRows=10&username=jbezerrajr`;
+
+    const response = await fetch(url);
+    
+    try{    
+           
+        const data = await response.json();   
+        res.send(data);
+    }catch(error){
+        console.log(error);
+    } 
+});
+
+app.post('/post_wheatherbit', async (req, res) =>{
+         
+    const url = `https://api.weatherbit.io/v2.0/forecast/daily?&lat=${req.body.textContent[0]}&lon=${req.body.textContent[1]}&key=72e60b68280146b8bfd7bef572fc91a0`;
 
     const response = await fetch(url);
     

@@ -11,10 +11,10 @@
         </header>
         <main>  
             <div class="tab">
-                <button class="tablinks" onclick="Client.openOption(event, 'new-travel')">Add or edit trip</button>
+                <button class="tablinks add_edit" onclick="Client.openOption(event, 'new-travel')">Add or edit trip</button>
                 <button class="tablinks" onclick="Client.openOption(event, 'my-travel')">My travel planner</button>   
                 <button class="tablinks save_trip" onclick="return Client.saveTravel(event)">Save trip</button>    
-                <button class="tablinks add_destination" onclick="return Client.addDestination(event)">Add destination</button>                
+                <button class="tablinks add_destination" onclick="return Client.addDestination()">Add destination</button>                
             </div>           
             <div id="new-travel" class="tabcontent">
                 
@@ -48,21 +48,12 @@
                     </div>
                     
                 </form>                             
-            </div>
-                  
-            <div id="my-travel" class="tabcontent">
-                
-                <form id = "trips">  
-                    
-                     
-                </form>
+            </div>                  
+            <div id="my-travel" class="tabcontent"> 
                           
-            </div> 
-       
+                <form id = "trips"> </form>                     
+            </div>       
         </main>
-        
-
-
         <script>
             // Check that service workers are supported
            /* if ('serviceWorker' in navigator) {
@@ -71,8 +62,7 @@
                     navigator.serviceWorker.register('/service-worker.js');
                 });
             }*/
-        </script> 
-        
+        </script>         
         <footer class = 'footer'>
             <p>Copyright</p>      
         </footer>
