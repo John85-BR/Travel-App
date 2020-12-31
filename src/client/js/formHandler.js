@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 let trip={
       trip_name:"",
       destination:[{
@@ -35,21 +37,11 @@ let trip={
   let addTravel = document.getElementById("add_travel");
   let myTravel = document.getElementById("trips");
 
-  function getAddress(event){
+  function returnIndex(data){
+    let results = 0;   
 
-    event.preventDefault();
-
-    let tableHDate = event.target.parentElement.querySelector(".date_table");
-    let tableHTemp = event.target.parentElement.querySelector(".temp_table");
-    let address = event.target.parentElement.querySelector(".address");
-    let imagem = event.target.parentElement.querySelector(".image");
-   
-    let results = 0;
-
-    alert(event.target.parentElement.className);
-  
-    if(address.value!=""){
-      let temp = address.value.trim().split(",");    
+    if(data!=""){
+      let temp = data.trim().split(",");    
       for(let item of temp){
         if(item!=""){
           ++results;
@@ -57,8 +49,26 @@ let trip={
       }
     }
     
+    return results;
+  }
+
+  function configAddress(data){
+
+    let str = data.replace(/[\[\]¨+\-.@º"§’#!?'$%^&*;:{}=\-–_><`´~()1234567890¹²³£¢¬ª|]/g,"").replace(/\s\s/g," ").replace(/,,/g,",");
     
-    if(results==3){
+    return str;
+  }
+
+  function getAddress(event){
+
+    event.preventDefault();
+
+    let tableHDate = event.target.parentElement.querySelector(".date_table");
+    let tableHTemp = event.target.parentElement.querySelector(".temp_table");
+    let address = event.target.parentElement.querySelector(".address");
+    let imagem = event.target.parentElement.querySelector(".image"); 
+    
+    if(returnIndex(address.value)==3){
 
       let content=address.value.replace(/ /g,"+").replace(/,/g,"");  
 
@@ -105,9 +115,6 @@ let trip={
       alert("Insert the City, State and Country");
     }
   }
-
-
-
 
   function saveData(){
     
@@ -161,10 +168,7 @@ let trip={
     let address = event.target.parentElement.querySelector(".address");      
 
     if(event.target.className=="address" && event.target.value!=""){
-      
-      address.value = address.value.replace(/[\[\]¨+\-.@º"§’#!?'$%^&*;:{}=\-–_><`´~()1234567890¹²³£¢¬ª|]/g,"");
-      address.value = address.value.replace(/\s\s/g," ");
-      address.value = address.value.replace(/,,/g,",");
+      address.value = configAddress(address.value);
       imagem.style.backgroundImage="";
     }   
   }
@@ -249,7 +253,7 @@ function openOption(evt, option) {
           <div class = "lodgind_info"><p><strong>Lodgind info</strong></p><span>${destination.lodgind_info}</span></div>
           <div class = "packing_list"><p><strong>Packing list</strong></p><span>${destination.packing_list}</span></div>
           <div class = "notes"><p><strong>Notes</strong></p><span>${destination.notes}</span></div>   
-          <div class = "table_weather"><table>                                                  
+          <div class = "table_weather"><table><caption>Forecast wheather - 16 days</caption>                                                   
           <tr class = "date_table">${destination.date_table}</tr><tr class = "temp_table">${destination.temp_table}                                                                 
           </tr></table></div>`;                
         element.innerHTML=newElement; 
@@ -284,7 +288,7 @@ function openOption(evt, option) {
         <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
         <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
         <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>  
-        <div style="overflow-x:auto;" class = "table_weather"><table><tr class = "date_table"></tr><tr class = "temp_table"></tr></table></div>
+        <div class = "table_weather"><table><caption>Forecast wheather - 16 days</caption><tr class = "date_table"></tr><tr class = "temp_table"></tr></table></div>
         <button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button></div>` ;
 
     destination.innerHTML=newDestination;
@@ -344,6 +348,7 @@ function openOption(evt, option) {
       destinationFather.classList.add("destinations_childs"); 
      
       destinationFather.setAttribute("data-index",count);    
+      let imageUrl = destination.image;
       let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)">Search</button> 
         <p class = "destination_number"><strong>Destination ${count+1}</strong></p>                            
         <figure class = "image"></figure>  
@@ -359,14 +364,18 @@ function openOption(evt, option) {
         <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33" value="${destination.lodgind_info}"></textarea>
         <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33" value="${destination.packing_list}"></textarea>
         <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33" value="${destination.notes}"></textarea>  
-        <div style="overflow-x:auto;" class = "table_weather"><table><tr class = "date_table">${destination.date_table}</tr>
+        <div class = "table_weather"><table><caption>Forecast wheather - 16 days</caption> <tr class = "date_table">${destination.date_table}</tr>
         <tr class = "temp_table">${destination.temp_table}</tr></table></div>`;   
 
         if(count>0){
           newDestination+=`<button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button>`;   
-        }
-        
+        }       
+
         destinationFather.innerHTML=newDestination;
+
+        let image = destinationFather.querySelector(".image");    
+        image.style.backgroundImage = imageUrl;
+
         let textareas = destinationFather.getElementsByTagName('textarea');
 
         for(let textarea of textareas){        
@@ -435,7 +444,7 @@ function openOption(evt, option) {
                         <textarea class = "lodgind_info" type="text" name="textarea" placeholder="Lodgind info" rows="3" cols="33"></textarea>
                         <textarea class = "packing_list" type="text" name="textarea" placeholder="Packing list" rows="3" cols="33"></textarea>
                         <textarea class = "notes" type="text" name="input" placeholder="Notes" rows="3" cols="33"></textarea>
-                        <div style="overflow-x:auto;" class = "table_weather"><table><tr class = "date_table"></tr><tr class = "temp_table"></tr></table>    
+                        <div class = "table_weather"><table><caption>Forecast wheather - 16 days</caption><tr class = "date_table"></tr><tr class = "temp_table"></tr></table>    
                         </div></div>`;
 
       alert("Informations save");
@@ -446,4 +455,4 @@ function openOption(evt, option) {
     }
   } 
 
-  export {openOption, saveTravel, addDestination, deleteDestination, getAddress, inputChanged}
+  export {openOption, saveTravel, addDestination, deleteDestination, getAddress, inputChanged, postData, returnIndex}

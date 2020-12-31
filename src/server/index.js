@@ -34,12 +34,6 @@ app.post('/save', (req, res) =>{
   
 });
 
-app.post('/edit', (req, res) =>{
-   
-    tripsData[req.body.index]=req.body.trip;
-  
-});
-
 app.post('/post_pixabay', async (req, res) =>{
    
     const norm = req.body.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’#!'$%\^&\*;:{}=\-–_`´~()]/g,"");       

@@ -1,4 +1,4 @@
-import { openOption,saveTravel,addDestination,deleteDestination,getAddress,inputChanged } from './js/formHandler';
+import { openOption,saveTravel,addDestination,deleteDestination,getAddress,inputChanged,postData,returnIndex } from './js/formHandler';
 
 import './styles/base.scss';
 import './styles/footer.scss';
@@ -17,6 +17,8 @@ export{
     deleteDestination,
     getAddress,
     inputChanged,
+    postData,
+    returnIndex
     
 }
 

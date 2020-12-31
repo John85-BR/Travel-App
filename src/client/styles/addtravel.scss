@@ -37,7 +37,8 @@ form#add_travel {
         .table_weather{          
             grid-area: cw;
             height: auto;
-            overflow-x:auto;  
+            overflow-x:auto;
+            border: 2px solid orange;  
         }
     
         .destination_number{
