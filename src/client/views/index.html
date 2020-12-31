@@ -11,15 +11,13 @@
         </header>
         <main>  
             <div class="tab">
-                <button class="tablinks add_edit" onclick="Client.openOption(event, 'new-travel')">Add or edit trip</button>
+                <button class="tablinks add_edit active" onclick="Client.openOption(event, 'new-travel')">Add or edit trip</button>
                 <button class="tablinks" onclick="Client.openOption(event, 'my-travel')">My travel planner</button>   
                 <button class="tablinks save_trip" onclick="return Client.saveTravel(event)">Save trip</button>    
                 <button class="tablinks add_destination" onclick="return Client.addDestination()">Add destination</button>                
             </div>           
-            <div id="new-travel" class="tabcontent">
-                
-                <form id = "add_travel">         
-                      
+            <div id="new-travel" class="tabcontent">               
+                <form id = "add_travel">                               
                     <input class="trip_name" type="text" name="input" placeholder="Trip name*" data-index='0'>     
                     <div class="destinations_childs" onkeyup="Client.inputChanged(event)" data-index='0'>
                         <button class = "search_location" onclick="return Client.getAddress(event)">Search</button> 
