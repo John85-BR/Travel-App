@@ -54,7 +54,7 @@ app.post('/post_pixabay', async (req, res) =>{
 app.post('/post_geonames', async (req, res) =>{
    
     const norm = req.body.textContent.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[’#!'$%\^&\*;:{}=\-–_`´~()]/g,"");       
-    const url = `http://api.geonames.org/searchJSON?q=${norm}&maxRows=10&username=jbezerrajr`;
+    const url = `http://api.geonames.org/searchJSON?q=${norm}&maxRows=10&username=${process.env.API_GEONAME}`;
 
     const response = await fetch(url);
     
@@ -69,7 +69,7 @@ app.post('/post_geonames', async (req, res) =>{
 
 app.post('/post_wheatherbit', async (req, res) =>{
          
-    const url = `https://api.weatherbit.io/v2.0/forecast/daily?&lat=${req.body.textContent[0]}&lon=${req.body.textContent[1]}&key=72e60b68280146b8bfd7bef572fc91a0`;
+    const url = `https://api.weatherbit.io/v2.0/forecast/daily?&lat=${req.body.textContent[0]}&lon=${req.body.textContent[1]}&key=${process.env.API_WEATHERBIT}`;
 
     const response = await fetch(url);
     
