@@ -35,6 +35,11 @@ let trip={
   let addTravel = document.getElementById("add_travel");
   let myTravel = document.getElementById("trips");
 
+  function postsAPIData(){
+
+    
+  }
+
   function getAddress(event){
 
     event.preventDefault();
@@ -105,6 +110,9 @@ let trip={
     }
   }
 
+
+
+
   function saveData(){
     
     let form = document.getElementById("add_travel");
@@ -148,7 +156,10 @@ let trip={
       
       } 
       trip["destination"][div.getAttribute('data-index')]=tempDestination;
-    }             
+    }
+    
+    trip.destination = blankDestination;
+    trip.trip_name="";   
   }
 
   function inputChanged(event){
@@ -193,9 +204,7 @@ function openOption(evt, option) {
     evt.currentTarget.className += " active";
 
     if(evt.currentTarget.textContent=="Add or edit trip"){
-      trip.destination = [];
-      trip.trip_name="";
-      trip.destination.push(blankDestination);
+      
       
       saveTripButton.style.display = "block";   
       addDestButton.style.display = "block";  
