@@ -35,21 +35,18 @@ let trip={
   let addTravel = document.getElementById("add_travel");
   let myTravel = document.getElementById("trips");
 
-  function postsAPIData(){
-
-    
-  }
-
   function getAddress(event){
 
     event.preventDefault();
- 
-    let imagem = event.target.parentElement.querySelector(".image");
-    let address = event.target.parentElement.querySelector(".address");
+
     let tableHDate = event.target.parentElement.querySelector(".date_table");
     let tableHTemp = event.target.parentElement.querySelector(".temp_table");
-
+    let address = event.target.parentElement.querySelector(".address");
+    let imagem = event.target.parentElement.querySelector(".image");
+   
     let results = 0;
+
+    alert(event.target.parentElement.className);
   
     if(address.value!=""){
       let temp = address.value.trim().split(",");    
@@ -64,8 +61,7 @@ let trip={
     if(results==3){
 
       let content=address.value.replace(/ /g,"+").replace(/,/g,"");  
-      
-   
+
       postData('http://localhost:8081/post_pixabay',{textContent:content})
       .then(data=>{                    
         if(parseInt(data.totalHits) > 0){        
@@ -78,28 +74,28 @@ let trip={
         }                
       });
 
-      postData(`http://localhost:8081/post_geonames`,{textContent:address.value})
-      .then(data=>{
+    postData(`http://localhost:8081/post_geonames`,{textContent:address.value})
+    .then(data=>{
 
-        if(data.totalResultsCount>0){      
-                   
-          postData(`http://localhost:8081/post_wheatherbit`,{textContent:[data.geonames[0].lat,data.geonames[0].lng]})
-          .then(tempData=>{
+      if(data.totalResultsCount>0){      
+                 
+        postData(`http://localhost:8081/post_wheatherbit`,{textContent:[data.geonames[0].lat,data.geonames[0].lng]})
+        .then(tempData=>{
 
-            let strTemp = `<th>Temp:</th>`;
-            let strDate = `<th>Date:</th>`;
+          let strTemp = `<th>Temp:</th>`;
+          let strDate = `<th>Date:</th>`;
 
-            for(let temp of tempData.data){
-              strDate+=`<td>${temp.valid_date}</td>`;
-              strTemp+=`<td>${temp.temp}</td>`;              
-            }
-            const index = event.target.parentElement.getAttribute("data-index");
+          for(let temp of tempData.data){
+            strDate+=`<td>${temp.valid_date}</td>`;
+            strTemp+=`<td>${temp.temp}</td>`;              
+          }
+          const index = event.target.parentElement.getAttribute("data-index");
 
-            trip.destination[index].date_table = strDate;
-            trip.destination[index].temp_table = strTemp;
+          trip.destination[index].date_table = strDate;
+          trip.destination[index].temp_table = strTemp;
 
-            tableHDate.innerHTML=strDate;
-            tableHTemp.innerHTML=strTemp;
+          tableHDate.innerHTML=strDate;
+          tableHTemp.innerHTML=strTemp;
 
           });         
         }
@@ -158,8 +154,6 @@ let trip={
       trip["destination"][div.getAttribute('data-index')]=tempDestination;
     }
     
-    trip.destination = blankDestination;
-    trip.trip_name="";   
   }
 
   function inputChanged(event){
@@ -268,7 +262,6 @@ function openOption(evt, option) {
   }
 
   function addDestination(){
-   
     
     let destination = document.createElement('div');
     destination.classList.add("destinations_childs"); 
@@ -321,7 +314,9 @@ function openOption(evt, option) {
       if(destination!==undefined){
         destTemp.push(destination);
       }
+      
     }
+    
     trip.destination = destTemp;    
     refreshTripsInAddTravel(trip,0); 
   }
@@ -349,7 +344,7 @@ function openOption(evt, option) {
       destinationFather.classList.add("destinations_childs"); 
      
       destinationFather.setAttribute("data-index",count);    
-      let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)"><strong>Search</strong></button> 
+      let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)">Search</button> 
         <p class = "destination_number"><strong>Destination ${count+1}</strong></p>                            
         <figure class = "image"></figure>  
         <input list = "autocomplete_places" class="address" type="text" name="input" placeholder="City, State, Country*" value="${destination.address}">
