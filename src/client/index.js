@@ -9,7 +9,9 @@ import './styles/mytravel.scss';
 import './styles/mediascreen.scss';
 
 
-//remenber put exports here
+
+
+
 export{
     openOption,
     saveTravel,
