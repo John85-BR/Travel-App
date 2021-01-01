@@ -285,7 +285,7 @@ function addDestination(){
   destination.setAttribute('data-index',trip.destination.length-1);
   let temp = parseInt(destination.getAttribute('data-index'))+1;
 
-  let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)">Search</button> 
+  let newDestination = `<button class = "search_location">Search</button> 
         <p class = "destination_number"><strong>Destination ${temp}</strong></p>                            
         <figure class = "image"></figure>  
         <input list = "autocomplete_places" class="address" type="text" name="input" placeholder="City, State, Country*">
@@ -303,6 +303,12 @@ function addDestination(){
         <div class = "table_weather"><table><caption>Forecast wheather - 16 days</caption><tr class = "date_table"></tr><tr class = "temp_table"></tr></table></div>
         <button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button></div>` ;
   destination.innerHTML=newDestination;
+
+  let search =destination.querySelector(".search_location");
+  search.addEventListener("click", (event)=>{    
+    Client.getAddress(event);
+  });
+
   destination.addEventListener("keyup", (event)=>{    
     Client.inputChanged(event);
   });
@@ -349,7 +355,7 @@ function refreshTripsInAddTravel(actualTrip,index=0){
       destinationFather.classList.add("destinations_childs"); 
       destinationFather.setAttribute("data-index",count);    
       let imageUrl = destination.image;
-      let newDestination = `<button class = "search_location" onclick="return Client.getAddress(event)">Search</button> 
+      let newDestination = `<button class = "search_location">Search</button> 
         <p class = "destination_number"><strong>Destination ${count+1}</strong></p>                            
         <figure class = "image"></figure>  
         <input list = "autocomplete_places" class="address" type="text" name="input" placeholder="City, State, Country*" value="${destination.address}">
@@ -368,12 +374,19 @@ function refreshTripsInAddTravel(actualTrip,index=0){
         <tr class = "temp_table">${destination.temp_table}</tr></table></div>`;   
 
         if(count>0){
-          newDestination+=`<button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button>`;   
+          newDestination+=`<button class = "delete_travel" onclick="return Client.deleteDestination(event)">Delete destination</button></div>`;   
         }       
         destinationFather.innerHTML=newDestination;
+
         let image = destinationFather.querySelector(".image");    
         image.style.backgroundImage = imageUrl;
         let textareas = destinationFather.getElementsByTagName('textarea');
+
+        let search =destinationFather.querySelector(".search_location");
+        search.addEventListener("click", (event)=>{    
+          Client.getAddress(event);
+        });
+
         for(let textarea of textareas){        
           textarea.value = destination[textarea.className];
         }
@@ -423,8 +436,8 @@ function saveTravel(event){
       //saves the data
       saveData();
       addTravel.innerHTML=`<input class="trip_name" type="text" name="input" placeholder="Trip name*" data-index='0'>     
-                    <div class="destinations_childs" onkeyup="Client.inputChanged(event)" data-index='0'>
-                        <button class = "search_location" onclick="return Client.getAddress(event)">Search</button> 
+                    <div class="destinations_childs" data-index='0'>
+                        <button class = "search_location">Search</button> 
                         <p class = "destination_number"><strong>Destination 1</strong></p>                            
                         <figure class = "image"></figure>  
                         <input class="address" type="text" name="input" placeholder="Country, state, city*">
@@ -442,9 +455,11 @@ function saveTravel(event){
 
       alert("Informations save");
       postData('http://localhost:8081/save',trip);
+      location.reload();
 
     }else{
       alert("Fill all inputs with * and click in search");
     }
   } 
+
   export {openOption, saveTravel, addDestination, deleteDestination, getAddress, inputChanged, postData, returnIndex}
